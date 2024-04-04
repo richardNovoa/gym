@@ -10,7 +10,7 @@ router.post(
   '/',
   [
     check('name', 'An exercise name is required').not().isEmpty(),
-    check('muscle', 'A muscle group is required').not().isEmpty(),
+    check('primaryMuscles', 'A muscle group is required').not().isEmpty(),
     check('equipment', 'An equipment type is required').not().isEmpty()
   ],
   async (req, res) => {
@@ -19,7 +19,17 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, muscle, equipment } = req.body;
+    const {
+      name,
+      force,
+      level,
+      mechanic,
+      equipment,
+      primaryMuscles,
+      secondaryMuscles,
+      instructions,
+      category
+    } = req.body;
 
     try {
       let exercise = await Exercise.findOne({ name: name });
@@ -31,8 +41,14 @@ router.post(
 
       exercise = new Exercise({
         name,
-        muscle,
-        equipment
+        force,
+        level,
+        mechanic,
+        equipment,
+        primaryMuscles,
+        secondaryMuscles,
+        instructions,
+        category
       });
       await exercise.save();
       res.send('Exercise Added');

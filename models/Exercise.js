@@ -5,13 +5,31 @@ const ExerciseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  muscle: {
-    type: String,
-    required: true
+  force: {
+    type: String
+  },
+  level: {
+    type: String
+  },
+  mechanic: {
+    type: String
   },
   equipment: {
     type: String,
     required: true
+  },
+  primaryMuscles: {
+    type: Array,
+    required: true
+  },
+  secondaryMuscles: {
+    type: Array
+  },
+  instructions: {
+    type: Array
+  },
+  category: {
+    type: Array
   }
 });
 
