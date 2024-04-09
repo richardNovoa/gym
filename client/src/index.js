@@ -5,12 +5,28 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './store';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import ExerciseList from './lib/components/ExerciseList';
+import Workout from './lib/components/workouts/Workout';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <ExerciseList />
+  },
+  {
+    path: '/workouts/:id',
+    element: <Workout />
+  }
+]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <RouterProvider router={router}>
+        <App />
+      </RouterProvider>
     </Provider>
   </React.StrictMode>
 );
