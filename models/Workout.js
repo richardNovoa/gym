@@ -12,8 +12,8 @@ const SetSchema = new mongoose.Schema({
 });
 
 const WorkoutExerciseSchema = new mongoose.Schema({
-  exercise_id: {
-    type: String,
+  exercise: {
+    type: Object,
     required: true
   },
   sets: [SetSchema]

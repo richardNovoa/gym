@@ -6,17 +6,22 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './store';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import ExerciseList from './lib/components/ExerciseList';
-import Workout from './lib/components/workouts/Workout';
+import ExerciseList from './lib/components/exercises/ExerciseList';
+import WorkoutPage from './lib/components/workouts/WorkoutPage';
+import AllWorkouts from './lib/components/workouts/AllWorkouts';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/workouts',
+    element: <AllWorkouts />
+  },
+  {
+    path: '/exercises',
     element: <ExerciseList />
   },
   {
     path: '/workouts/:id',
-    element: <Workout />
+    element: <WorkoutPage />
   }
 ]);
 

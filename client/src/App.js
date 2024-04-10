@@ -1,12 +1,7 @@
-import ExerciseList from './lib/components/ExerciseList';
 import './App.css';
 
 function App() {
-  return (
-    <div className='App'>
-      <ExerciseList />
-    </div>
-  );
+  return <div className='App'></div>;
 }
 
 export default App;
