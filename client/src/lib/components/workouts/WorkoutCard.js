@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import WorkoutExerciseRow from './WorkoutExerciseRow';
 
 const WorkoutCard = ({ name, exercises, id }) => {
   return (

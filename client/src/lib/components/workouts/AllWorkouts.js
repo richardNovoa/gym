@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import WorkoutCard from './WorkoutCard';
 import { getWorkouts } from '../../../events/workout';
+import Search from '../search/Search';
 
 const AllWorkouts = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const AllWorkouts = () => {
   }, [dispatch]);
   return (
     <div className='text-lg'>
+      <Search data={workouts} />
       <h1 className='pl-6 mt-10'>Folder</h1>
       <div className='w-96 h-96 p-4 gap-4 flex flex-wrap '>
         {workouts.map((workout) => (

@@ -7,6 +7,7 @@ const ExerciseCard = ({ exercise }) => {
       <img
         src={`https://raw.githubusercontent.com/wrkout/exercises.json/master/exercises/${slug}/images/0.jpg`}
         className='w-48 object-cover object-top h-32'
+        alt=''
       />
       <div className='pl-4'>
         <h2 className='text-xl font-regular'>{exercise.name}</h2>

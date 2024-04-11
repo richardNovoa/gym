@@ -14,11 +14,24 @@ export const getWorkouts = createAsyncThunk(
   }
 );
 
+export const getWorkoutById = createAsyncThunk(
+  'workouts/getWorkoutById', // Use a namespace for better organization
+  async (id) => {
+    try {
+      const res = await axios.get(`http://localhost:5002/api/workouts/${id}`); // Include ID in URL
+      return res.data;
+    } catch (err) {
+      return Promise.reject(err); // Reject with the error for handling in reducer
+    }
+  }
+);
+
 // Reducers
 export const workoutReducer = createSlice({
   name: 'workouts',
   initialState: {
     workouts: [],
+    workout: null,
     error: null
   },
   reducers: {},
@@ -33,6 +46,19 @@ export const workoutReducer = createSlice({
         state.loading = false;
       })
       .addCase(getWorkouts.rejected, (state, action) => {
+        state.error = action.error.message;
+        state.loading = false;
+      })
+      // getWorkoutById
+      .addCase(getWorkoutById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getWorkoutById.fulfilled, (state, action) => {
+        state.workout = action.payload;
+        state.error = null;
+        state.loading = false;
+      })
+      .addCase(getWorkoutById.rejected, (state, action) => {
         state.error = action.error.message;
         state.loading = false;
       });

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const WorkoutExerciseRow = ({ previous, reps, weight, isChecked }) => {
+const ExerciseRow = ({ previous, reps, weight, isChecked }) => {
   return (
     <div className='flex gap-4'>
       <div>{previous}</div>
@@ -32,4 +32,4 @@ const WorkoutExerciseRow = ({ previous, reps, weight, isChecked }) => {
   );
 };
 
-export default WorkoutExerciseRow;
+export default ExerciseRow;
