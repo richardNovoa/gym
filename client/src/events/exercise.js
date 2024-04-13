@@ -5,7 +5,7 @@ export const getExercises = createAsyncThunk(
   'exercises/getExercises', // Use a namespace for better organization
   async () => {
     try {
-      const res = await axios.get('http://localhost:5002/api/exercises');
+      const res = await axios.get('/api/exercises');
       return res.data; // Return the fetched data
     } catch (err) {
       return Promise.reject(err); // Reject with the error for handling in reducer

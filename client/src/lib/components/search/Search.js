@@ -5,7 +5,7 @@ import SearchResult from './SearchResult';
 const Search = ({ data }) => {
   const [results, setResults] = React.useState([]);
   return (
-    <div>
+    <div className='relative'>
       <SearchInput data={data} setResults={setResults} />
       <SearchResult results={results} />
     </div>

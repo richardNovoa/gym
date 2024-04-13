@@ -12,7 +12,7 @@ import AllWorkouts from './lib/components/workouts/AllWorkouts';
 
 const router = createBrowserRouter([
   {
-    path: '/workouts',
+    path: '/',
     element: <AllWorkouts />
   },
   {
