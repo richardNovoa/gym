@@ -7,7 +7,7 @@ export const getWorkouts = createAsyncThunk(
   'workouts/getWorkouts', // Use a namespace for better organization
   async () => {
     try {
-      const res = await axios.get(`${baseUrl}/api/workouts`);
+      const res = await axios.get(`${baseUrl}/api/workouts`, { mode: 'cors' });
       console.log(baseUrl);
       return res.data;
       // Return the fetched data
@@ -21,7 +21,9 @@ export const getWorkoutById = createAsyncThunk(
   'workouts/getWorkoutById', // Use a namespace for better organization
   async (id) => {
     try {
-      const res = await axios.get(`${baseUrl}/api/workouts/${id}`); // Include ID in URL
+      const res = await axios.get(`${baseUrl}/api/workouts/${id}`, {
+        mode: 'cors'
+      }); // Include ID in URL
       return res.data;
     } catch (err) {
       return Promise.reject(err); // Reject with the error for handling in reducer
