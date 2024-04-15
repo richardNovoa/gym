@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
 export const getExercises = createAsyncThunk(
   'exercises/getExercises', // Use a namespace for better organization
   async () => {
     try {
-      const res = await axios.get('/api/exercises');
+      const res = await axios.get(`${baseUrl}/api/exercises`);
       return res.data; // Return the fetched data
     } catch (err) {
       return Promise.reject(err); // Reject with the error for handling in reducer
