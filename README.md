@@ -1,78 +1,51 @@
 # Gym
 
-A mobile-first training log. The cycle is cardio, chest and back, shoulders and arms, legs, then one rest day. Strength exercises log a pyramid of 12, 10, 8, 6 and 4 reps (about 2 reps in reserve, 1 on the set of 4) and a back-off set at the 8-rep weight, aiming for 12. Drop segments hang off that back-off.
-
-The app is a Vite + React + TypeScript client. Supabase Auth, Postgres, and row level security replace the old Express, Mongoose, and MongoDB server. TanStack Query holds server state (workouts, sets, the exercise catalog) and refreshes it after each save. The Supabase session lives in a small React context. The previous Redux store only wrapped list fetches, so it is gone.
+The original workout folder, exercise list, and workout page. Express and MongoDB are gone. Those screens read Supabase through the same Redux thunks.
 
 ## Local development
 
-Node 20 or newer.
+Node 20 or newer. From the repo root:
 
 ```bash
-cp .env.example .env
+cp .env.example .env.local
 npm install
 npm run dev
 ```
 
-Open http://localhost:5173. Create an account with email and password. If the Supabase project requires email confirmation, confirm the address before signing in. The signup trigger writes `profiles.name` from the name you enter.
+Open http://localhost:5173. `.env.local` is gitignored. Vite reads it on startup.
 
-### Environment variables
+| Name | Purpose |
+| --- | --- |
+| `VITE_SUPABASE_URL` | Project URL. Inlined at build time. |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Public publishable key. |
+| `SUPABASE_SERVICE_ROLE_KEY` | Seed script only. Do not prefix it with `VITE_`. |
 
-| Name | Where it is read | Purpose |
-| --- | --- | --- |
-| `VITE_SUPABASE_URL` | Vite client | Project URL. Inlined at build time. |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | Vite client | Public publishable key. Safe to ship in the browser. |
-| `SUPABASE_URL` | Seed script | Same project URL. Falls back to `VITE_SUPABASE_URL`. |
-| `SUPABASE_SERVICE_ROLE_KEY` | Seed script only | Bypasses row level security to insert the shared catalog. |
+Sign in with email and password. Registration stores the name on the profile trigger. If confirmation email is required, confirm before signing in. `Sign out` sits above the original screens so a session can be cleared. That control was not in the original UI.
 
-Copy the values into `.env` for local work. On Netlify or Vercel, set the two `VITE_` variables in the host UI before the build. Vite bakes them into the bundle. Do not set the service role key on the frontend host, and do not prefix it with `VITE_`.
-
-The publishable key in `.env.example` is public by design. The service role key is never committed.
+`/exercises` is still a direct URL. The original app had no link to it.
 
 ## Scripts
 
 ```bash
-npm run dev          # Vite dev server
-npm run build        # typecheck and production build
-npm run typecheck
-npm test             # set scheme, Epley 1RM, next-split, search
+npm run dev
+npm run build
+npm test
 npm run seed:exercises
 ```
 
-## Exercise catalog
-
-Shared exercises (`owner_id` null) come from [wrkout/exercises.json](https://github.com/wrkout/exercises.json). Authenticated users can read them. Inserting them requires the service role key, because row level security only allows a user to insert rows they own.
-
-The script is one-off and idempotent (upsert on `source_id`, the dataset directory id). It is not part of install, dev, or build. Images are stored as raw GitHub URLs from that repository.
+The exercise list uses the shared catalog (`owner_id` null) from [wrkout/exercises.json](https://github.com/wrkout/exercises.json). Cards still build the image URL from the exercise name, the same way as before. Seed when you have the service role key:
 
 ```bash
-# preview the first rows, no database writes
 node scripts/seed-exercises.mjs --dry-run
-
-# write the catalog
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key npm run seed:exercises
+SUPABASE_SERVICE_ROLE_KEY=... npm run seed:exercises
 ```
 
-The key is in the Supabase dashboard under Project Settings → API. Keep it out of git.
+Netlify builds with the public URL and publishable key in `netlify.toml`. A value set in the Netlify UI overrides the file. `netlify.toml` rewrites every path to `index.html`.
 
-Until the seed has been run, the library is empty except for exercises you add yourself.
+## What the original UI does not include
 
-## Deploy
+The Express routes for creating and editing workouts and exercises had no screens. This client still only lists workouts, opens one, searches by name, and lists exercises. Set rows show the saved reps, weight, and completed check. They are not an editor.
 
-`netlify.toml` builds the app, publishes `dist`, and rewrites every path to `index.html` so client-side routes work. The old rewrite that proxied `/api` to another Netlify host is gone. There is no Express server.
+There is no split-cycle home, cardio logger, history page, template editor, or estimated-1RM chart. Those are not part of the original interface.
 
-`vercel.json` has the same single-page rewrite. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in the project settings, then deploy the repository root.
-
-In the Supabase dashboard, add the deployed origin to Authentication → URL configuration if you use email links.
-
-## Data model
-
-The hosted schema is already applied. This repo does not ship SQL migrations. Authenticated users only see their own workouts, sets, templates, and cardio; they can read the shared exercise catalog and their own custom exercises.
-
-A logged workout's `split` decides the next day: cardio → chest & back → shoulders & arms → legs → rest → cardio. A day marked `other`, or an empty history, starts the cycle at cardio.
-
-Estimated one-rep max is the Epley formula, weight × (1 + reps / 30), taken from completed sets. Warm-up sets are left out of the chart.
-
-## Credential note
-
-`config/default.json` held a MongoDB Atlas connection string and password. That file is removed from the tree. The secret is still in git history and should be rotated.
+`config/default.json` held a MongoDB Atlas URI and password. It stays out of the tree. The secret is still in git history and should be rotated.

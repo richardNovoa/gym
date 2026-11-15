@@ -1,0 +1,38 @@
+import React from 'react';
+
+const ExerciseRow = ({ previous, reps, weight, isChecked }) => {
+  return (
+    <div className='flex gap-4'>
+      <div>{previous}</div>
+      <div>
+        <input
+          type='text'
+          className='bg-gray-200 w-8 px-2'
+          placeholder='0'
+          value={reps}
+          readOnly
+        />
+      </div>
+      <div>
+        <input
+          type='text'
+          className='bg-gray-200 w-16 px-2'
+          placeholder='0'
+          value={weight}
+          readOnly
+        />
+      </div>
+      <div>
+        <input
+          type='checkbox'
+          className='bg-gray-200 w-6 px-2'
+          placeholder='0'
+          checked={Boolean(isChecked)}
+          onChange={() => {}}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default ExerciseRow;
