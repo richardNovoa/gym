@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# SPA fallback. Vite has no /api server; this does not proxy anywhere.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
